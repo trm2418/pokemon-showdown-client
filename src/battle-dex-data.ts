@@ -1052,7 +1052,7 @@ class Item implements Effect {
 interface MoveFlags {
 	/** The move has an animation when used on an ally. */
 	allyanim?: 1 | 0;
-	/** Power is multiplied by 1.5 when used by a Pokemon with the Strong Jaw Ability. */
+	/** Power is multiplied by 1.4 when used by a Pokemon with the Strong Jaw Ability. */
 	bite?: 1 | 0;
 	/** Has no effect on Pokemon with the Bulletproof Ability. */
 	bullet?: 1 | 0;
@@ -1080,10 +1080,16 @@ interface MoveFlags {
 	powder?: 1 | 0;
 	/** Blocked by Detect, Protect, Spiky Shield, and if not a Status move, King's Shield. */
 	protect?: 1 | 0;
-	/** Power is multiplied by 1.5 when used by a Pokemon with the Mega Launcher Ability. */
+	/** Power is multiplied by 1.4 when used by a Pokemon with the Mega Launcher Ability. */
 	pulse?: 1 | 0;
-	/** Power is multiplied by 1.2 when used by a Pokemon with the Iron Fist Ability. */
+	/** Power is multiplied by 1.3 when used by a Pokemon with the Iron Fist Ability. */
 	punch?: 1 | 0;
+	/** Power is multiplied by 1.3 when used by a Pokemon with the Striker Ability. */
+	kick?: 1 | 0;
+	/** Power is multiplied by 1.3 when used by a Pokemon with the Sorcery Ability. */
+	magic?: 1 | 0;
+	/** Power is multiplied by 1.3 when used by a Pokemon with the Sharp Blades Ability. */
+	blade?: 1 | 0;
 	/** If this move is successful, the user must recharge on the following turn and cannot make a move. */
 	recharge?: 1 | 0;
 	/** Bounced back to the original user by Magic Coat or the Magic Bounce Ability. */

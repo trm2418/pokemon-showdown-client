@@ -742,6 +742,15 @@ class BattleTooltips {
 			if (move.flags.bullet) {
 				text += `<p class="movetag">&#x2713; Bullet-like <small>(doesn't affect Bulletproof pokemon)</small></p>`;
 			}
+			if (move.flags.kick && ability === 'striker') {
+				text += `<p class="movetag">&#x2713; Kick <small>(boosted by Striker)</small></p>`;
+			}
+			if (move.flags.magic && ability === 'sorcery') {
+				text += `<p class="movetag">&#x2713; Magic <small>(boosted by Sorcery)</small></p>`;
+			}
+			if (move.flags.blade && ability === 'sharpblades') {
+				text += `<p class="movetag">&#x2713; Blade <small>(boosted by Sharp Blades)</small></p>`;
+			}
 		}
 		return text;
 	}
@@ -1076,6 +1085,9 @@ class BattleTooltips {
 		}
 		if (ability === 'purepower' || ability === 'hugepower') {
 			stats.atk *= 2;
+		}
+		if (ability === 'felineprowess') {
+			stats.spa *= 2;
 		}
 		if (ability === 'hustle' || (ability === 'gorillatactics' && !clientPokemon?.volatiles['dynamax'])) {
 			stats.atk = Math.floor(stats.atk * 1.5);
@@ -1495,11 +1507,14 @@ class BattleTooltips {
 		} else if (value.tryAbility('Compound Eyes')) {
 			accuracyModifiers.push(5325);
 			value.abilityModify(1.3, "Compound Eyes");
+		} else if (value.tryAbility('Illuminate')) {
+			accuracyModifiers.push(4915);
+			value.abilityModify(1.2, "Illuminate");
 		}
 
 		if (value.tryItem('Wide Lens')) {
-			accuracyModifiers.push(4505);
-			value.itemModify(1.1, "Wide Lens");
+			accuracyModifiers.push(4710);
+			value.itemModify(1.15, "Wide Lens");
 		}
 
 		// Chaining modifiers
@@ -1625,6 +1640,9 @@ class BattleTooltips {
 		if (move.id === 'magnitude') {
 			value.setRange(10, 150);
 		}
+		if (move.id === 'erraticshock') {
+			value.setRange(25, 200);
+		}
 		if (move.id === 'venoshock' && target) {
 			if (['psn', 'tox'].includes(target.status)) {
 				value.modify(2, 'Venoshock + Poison');
@@ -1656,6 +1674,7 @@ class BattleTooltips {
 			value.set(20, 'Battle Bond');
 		}
 		// Moves that check opponent speed
+		/*
 		if (move.id === 'electroball' && target) {
 			let [minSpe, maxSpe] = this.getSpeedRange(target);
 			let minRatio = (modifiedStats.spe / maxSpe);
@@ -1676,7 +1695,7 @@ class BattleTooltips {
 			else max = 40;
 
 			value.setRange(min, max);
-		}
+		}*/
 		if (move.id === 'gyroball' && target) {
 			let [minSpe, maxSpe] = this.getSpeedRange(target);
 			let min = (Math.floor(25 * minSpe / modifiedStats.spe) || 1);
@@ -1737,7 +1756,7 @@ class BattleTooltips {
 		if (move.flags['bite']) {
 			value.abilityModify(1.4, "Strong Jaw");
 		}
-		if (value.value <= 60) {
+		if (value.value <= 65) {
 			value.abilityModify(1.5, "Technician");
 		}
 		if (['psn', 'tox'].includes(pokemon.status) && move.category === 'Physical') {
@@ -1788,6 +1807,15 @@ class BattleTooltips {
 		}
 		if (move.flags['punch']) {
 			value.abilityModify(1.3, 'Iron Fist');
+		}
+		if (move.flags['kick']) {
+			value.abilityModify(1.3, 'Striker');
+		}
+		if (move.flags['magic']) {
+			value.abilityModify(1.3, 'Sorcery');
+		}
+		if (move.flags['blade']) {
+			value.abilityModify(1.3, 'Sharp Blades');
 		}
 		if (move.recoil || move.hasCrashDamage) {
 			value.abilityModify(1.3, 'Reckless');
