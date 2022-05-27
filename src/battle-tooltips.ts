@@ -105,7 +105,7 @@ class ModifiableValue {
 		}
 		if (name) this.comment.push(` (${this.round(factor)}&times; from ${name})`);
 		this.value *= factor;
-		if (!(name === 'Technician' && this.maxValue > 60)) this.maxValue *= factor;
+		if (!(name === 'Technician' && this.maxValue > 65)) this.maxValue *= factor;
 		return true;
 	}
 	set(value: number, reason?: string) {
@@ -1732,10 +1732,10 @@ class BattleTooltips {
 			value.abilityModify(1.5, "Flare Boost");
 		}
 		if (move.flags['pulse']) {
-			value.abilityModify(1.5, "Mega Launcher");
+			value.abilityModify(1.4, "Mega Launcher");
 		}
 		if (move.flags['bite']) {
-			value.abilityModify(1.5, "Strong Jaw");
+			value.abilityModify(1.4, "Strong Jaw");
 		}
 		if (value.value <= 60) {
 			value.abilityModify(1.5, "Technician");
@@ -1747,23 +1747,24 @@ class BattleTooltips {
 			if (!value.tryAbility("Guts")) value.modify(0.5, 'Burn');
 		}
 		if (['Rock', 'Ground', 'Steel'].includes(moveType) && this.battle.weather === 'sandstorm') {
-			if (value.tryAbility("Sand Force")) value.weatherModify(1.3, "Sandstorm", "Sand Force");
+			if (value.tryAbility("Sand Force")) value.weatherModify(1.4, "Sandstorm", "Sand Force");
 		}
 		if (move.secondaries) {
 			value.abilityModify(1.3, "Sheer Force");
 		}
 		if (move.flags['contact']) {
-			value.abilityModify(1.3, "Tough Claws");
+			value.abilityModify(1.25, "Tough Claws");
 		}
 		if (moveType === 'Steel') {
 			value.abilityModify(1.5, "Steely Spirit");
 		}
 		if (move.flags['sound']) {
 			value.abilityModify(1.3, "Punk Rock");
+			value.abilityModify(1.5, "Amplifier");
 		}
 		if (target) {
 			if (["MF", "FM"].includes(pokemon.gender + target.gender)) {
-				value.abilityModify(0.75, "Rivalry");
+				//value.abilityModify(0.75, "Rivalry");
 			} else if (["MM", "FF"].includes(pokemon.gender + target.gender)) {
 				value.abilityModify(1.25, "Rivalry");
 			}
@@ -1776,20 +1777,20 @@ class BattleTooltips {
 			!move.id.startsWith('hiddenpower')
 		) {
 			if (move.type === 'Normal') {
-				value.abilityModify(this.battle.gen > 6 ? 1.2 : 1.3, "Aerilate");
-				value.abilityModify(this.battle.gen > 6 ? 1.2 : 1.3, "Galvanize");
-				value.abilityModify(this.battle.gen > 6 ? 1.2 : 1.3, "Pixilate");
-				value.abilityModify(this.battle.gen > 6 ? 1.2 : 1.3, "Refrigerate");
+				value.abilityModify(this.battle.gen > 6 ? 1.1 : 1.3, "Aerilate");
+				value.abilityModify(this.battle.gen > 6 ? 1.1 : 1.3, "Galvanize");
+				value.abilityModify(this.battle.gen > 6 ? 1.1 : 1.3, "Pixilate");
+				value.abilityModify(this.battle.gen > 6 ? 1.1 : 1.3, "Refrigerate");
 			}
 			if (this.battle.gen > 6) {
-				value.abilityModify(1.2, "Normalize");
+				value.abilityModify(1.5, "Normalize");
 			}
 		}
 		if (move.flags['punch']) {
-			value.abilityModify(1.2, 'Iron Fist');
+			value.abilityModify(1.3, 'Iron Fist');
 		}
 		if (move.recoil || move.hasCrashDamage) {
-			value.abilityModify(1.2, 'Reckless');
+			value.abilityModify(1.3, 'Reckless');
 		}
 
 		if (move.category !== 'Status') {
@@ -1863,6 +1864,9 @@ class BattleTooltips {
 		}
 		if (move.id === 'risingvoltage' && this.battle.hasPseudoWeather('Electric Terrain') && target?.isGrounded()) {
 			value.modify(2, 'Rising Voltage + Electric Terrain boost');
+		}
+		if (move.id === 'grassflurry' && this.battle.hasPseudoWeather('Grassy Terrain')) {
+			value.modify(2, 'Grass Flurry + Grassy Terrain boost');
 		}
 		if (
 			move.id === 'steelroller' &&
