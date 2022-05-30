@@ -1096,6 +1096,9 @@ class BattleTooltips {
 			if (this.battle.gen >= 4 && this.pokemonHasType(pokemon, 'Rock') && weather === 'sandstorm') {
 				stats.spd = Math.floor(stats.spd * 1.5);
 			}
+			if (this.pokemonHasType(pokemon, 'Ice') && (weather === 'hail' || weather === 'sleet')) {
+				stats.def = Math.floor(stats.def * 1.5);
+			}
 			if (ability === 'sandrush' && weather === 'sandstorm') {
 				speedModifiers.push(2);
 			}
@@ -1127,7 +1130,7 @@ class BattleTooltips {
 				}
 			}
 		}
-		if (ability === 'defeatist' && serverPokemon.hp <= serverPokemon.maxhp / 2) {
+		if (ability === 'defeatist' && serverPokemon.hp <= serverPokemon.maxhp / 3) {
 			stats.atk = Math.floor(stats.atk * 0.5);
 			stats.spa = Math.floor(stats.spa * 0.5);
 		}
@@ -1142,6 +1145,7 @@ class BattleTooltips {
 		}
 		if (ability === 'marvelscale' && pokemon.status) {
 			stats.def = Math.floor(stats.def * 1.5);
+			stats.spd = Math.floor(stats.spd * 1.5);
 		}
 		const isNFE = Dex.species.get(serverPokemon.speciesForme).evos?.some(evo => {
 			const evoSpecies = Dex.species.get(evo);
@@ -1153,7 +1157,7 @@ class BattleTooltips {
 			stats.spd = Math.floor(stats.spd * 1.5);
 		}
 		if (ability === 'grasspelt' && this.battle.hasPseudoWeather('Grassy Terrain')) {
-			stats.def = Math.floor(stats.def * 1.5);
+			stats.def = Math.floor(stats.def * 2);
 		}
 		if (ability === 'surgesurfer' && this.battle.hasPseudoWeather('Electric Terrain')) {
 			speedModifiers.push(2);
@@ -1161,7 +1165,7 @@ class BattleTooltips {
 		if (item === 'choicespecs' && !clientPokemon?.volatiles['dynamax']) {
 			stats.spa = Math.floor(stats.spa * 1.5);
 		}
-		if (item === 'deepseatooth' && species === 'Clamperl') {
+		if (item === 'deepseatooth' && (species === 'Clamperl' || species === 'Gorebyss')) {
 			stats.spa *= 2;
 		}
 		if (item === 'souldew' && this.battle.gen <= 6 && (species === 'Latios' || species === 'Latias')) {
@@ -1185,7 +1189,7 @@ class BattleTooltips {
 		if (item === 'assaultvest') {
 			stats.spd = Math.floor(stats.spd * 1.5);
 		}
-		if (item === 'deepseascale' && species === 'Clamperl') {
+		if (item === 'deepseascale' && (species === 'Clamperl' || species === 'Huntail')) {
 			stats.spd *= 2;
 		}
 		if (item === 'choicescarf' && !clientPokemon?.volatiles['dynamax']) {
@@ -1453,6 +1457,7 @@ class BattleTooltips {
 		}
 		if (move.id === 'blizzard') {
 			value.weatherModify(0, 'Hail');
+			value.weatherModify(0, 'Sleet');
 		}
 		if (move.id === 'hurricane' || move.id === 'thunder') {
 			value.weatherModify(0, 'Rain Dance');
@@ -1531,6 +1536,10 @@ class BattleTooltips {
 		if (move.id === 'hurricane' || move.id === 'thunder') {
 			if (value.tryWeather('Sunny Day')) value.set(50, 'Sunny Day');
 			if (value.tryWeather('Desolate Land')) value.set(50, 'Desolate Land');
+		}
+		if (move.id === 'wintrybreath') {
+			if (value.tryWeather('Hail')) value.set(80, 'Hail');
+			if (value.tryWeather('Sleet')) value.set(80, 'Sleet');
 		}
 
 		// Chained modifiers round down on 0.5
@@ -1770,6 +1779,13 @@ class BattleTooltips {
 		}
 		if (move.secondaries) {
 			value.abilityModify(1.3, "Sheer Force");
+		}
+		if (move.id === 'sunblast') {
+			value.weatherModify(1.3, "Sunny Day", "Sheer Force");
+			value.weatherModify(1.3, "Desolate Land", "Sheer Force");
+		}
+		if (move.id === 'creepingcold') {
+			value.weatherModify(1.3, "Hail", "Sheer Force");
 		}
 		if (move.flags['contact']) {
 			value.abilityModify(1.25, "Tough Claws");
